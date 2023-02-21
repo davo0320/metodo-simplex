@@ -35,7 +35,7 @@ function calcMatriz(p_matriz) {
 	}
 	var v_in = p_matriz[0][indMaior];
 	var v_out = p_matriz[indMenor][0];
-	document.getElementById("tab").innerHTML+="<p>Troca VB: entra "+v_in.substr(0,1)+"<sub>"+v_in.substr(1,1)+"</sub> e sai "+v_out.substr(0,1)+"<sub>"+v_out.substr(1,1)+"</sub></p>";
+	document.getElementById("tab").innerHTML+="<p>Reemplazo en VB: Entre "+v_in.substr(0,1)+"<sub>"+v_in.substr(1,1)+"</sub> y  "+v_out.substr(0,1)+"<sub>"+v_out.substr(1,1)+"</sub></p>";
 	p_matriz[indMenor][0] = p_matriz[0][indMaior];
 	
 	printtabla(p_matriz);
@@ -49,7 +49,7 @@ function calcMatriz(p_matriz) {
 		}
 		var fraccion = new Fraction(1/aux);
 		var numFormatado = fraccion.toFraction();
-		document.getElementById("tab").innerHTML+="<p>Linha "+indMenor+" = Linha "+indMenor+" * "+numFormatado+"</p>";
+		document.getElementById("tab").innerHTML+="<p>Renglon "+indMenor+" = Renglon "+indMenor+" * "+numFormatado+"</p>";
 		printtabla(p_matriz);
 	}
 
@@ -62,13 +62,13 @@ function calcMatriz(p_matriz) {
 			}
 			var fraccion = new Fraction(-1*aux);
 			var numFormatado = fraccion.toFraction();
-			document.getElementById("tab").innerHTML+="<p>Linha "+i+" = Linha "+i+" + ("+numFormatado+") * Linha "+indMenor+"</p>";
+			document.getElementById("tab").innerHTML+="<p>Renglon "+i+" = Renglon "+i+" + ("+numFormatado+") * Renglon "+indMenor+"</p>";
 			printtabla(p_matriz);
 		}
 	}
 }
 
-//bloqueia edição nos inputs
+//Bloquea la edición de las entradas.
 function esconder(p_variables, p_restricciones) {
 	for (i = 1; i <= p_variables; i++) {
 		document.getElementById('y'+i).style = "-moz-appearance:textfield;";
@@ -81,9 +81,9 @@ function esconder(p_variables, p_restricciones) {
 		}
 	}
 	for (j = 1; j <= p_restricciones; j++) {
-		document.getElementById('b'+j).style = "-moz-appearance:textfield;";
-		document.getElementById('b'+j).style.border = "0";
-		document.getElementById('b'+j).readOnly = true;
+		document.getElementById('Const'+j).style = "-moz-appearance:textfield;";
+		document.getElementById('Const'+j).style.border = "0";
+		document.getElementById('Const'+j).readOnly = true;
 	}
 }
 
@@ -91,21 +91,21 @@ function validarCoeficientes(p_variables, p_restricciones) {
 	for (i = 1; i <= p_variables; i++) {
 		if (document.getElementById('y'+i).value == "") {
 			document.getElementById('y'+i).focus();
-			alert('Informe os valores de todos os coeficientes.');
+			alert('Ingrese los valores de todos los coeficientes.');
 			return 1;
 		}
 		for (j = 1; j <= p_restricciones; j++) {
 			if (document.getElementById('x'+j+i).value == "") {
 				document.getElementById('x'+j+i).focus();
-				alert('Informe os valores de todos os coeficientes.');
+				alert('Ingrese los valores de todos los coeficientes.');
 				return 1;
 			}
 		}
 	}
 	for (j = 1; j <= p_restricciones; j++) {
-		if (document.getElementById('b'+j).value == "") {
-			document.getElementById('b'+j).focus();
-			alert('Informe os valores de todas as constantes.');
+		if (document.getElementById('Const'+j).value == "") {
+			document.getElementById('Const'+j).focus();
+			alert('Ingrese el valor de todas las constantes');
 			return 1;
 		}
 	}
@@ -123,33 +123,16 @@ function mouseOut(id) {
 	document.getElementById("btnImg").src = "info.png"
 }
 
-// function manual() {
-// 	var texto = 'Simplex - Passo a Passo\n\n'
-// 	+'Informe o número de variáveis (mínimo 1)\n'
-// +'Informe o número de restrições (mínimo 1)\n'
-// +'obs.: NÃO contar com a restrição Xi >= 0\n'
-// +'Clique no botão "OK"\n'
-// +'- Vai aparecer na tela o local para informar os valores dos coeficientes.\n'
-// +'Informe os valores dos coeficientes das variáveis na função objetivo\n'
-// +'Informe os valores dos coeficientes e da constante nas restrições\n'
-// +'Clique no botão "Resolver"\n'
-// +'- Vai aparecer na tela o passo a passo da resolução informando a operação realizada antes da tabla.\n'
-// +'- No final é exibido os valores das variáveis e o valor resultante da função objetivo.\n'
-// +'Clique no botão "Novo" para resolver outro problema.\n\n'
-// +'observações: O sistema só resolve problemas de maximização,\n'
-// +'com restrições de sinal "<=" e com constantes maiores que zero.';
-// 	alert(texto);
-// }
 
-function criarForm(p_variables, p_restricciones) {
+function crearFormato(p_variables, p_restricciones) {
 	
 	if (p_variables == "" || p_variables <= 0 || p_variables != parseInt(p_variables)) {
-		alert('Preencha o campo com a quantidade de variáveis.');
+		alert('La cantidad de variables no puede estar vacía');
 		form1.variables.focus();
 		return;
 	} else {
 		if (p_restricciones == "" || p_restricciones <= 0 || p_restricciones != parseInt(p_restricciones)) {
-			alert('Preencha o campo com a quantidade de restrições.');
+			alert('La cantidad de restricciones no puede estar vacía.');
 			form1.restricciones.focus();
 			return;
 		}
@@ -162,15 +145,15 @@ function criarForm(p_variables, p_restricciones) {
 			document.getElementById("aqui").innerHTML+=" + <input type='number' class='inputZ' required autocomplete='off' size='5' maxlength='10' step='0.1' id='y"+h+"' name='y"+h+"' />x<sub>"+h+"</sub>";
 		}
 		for (var i = 1; i <= p_restricciones; i++) {
-			document.getElementById("aqui").innerHTML+="<p><b>Restrição "+i+"</b></p>";
+			document.getElementById("aqui").innerHTML+="<p><Const>Restricción "+i+"</Const></p>";
 			document.getElementById("aqui").innerHTML+="<input type='number' class='input' required autocomplete='off' size='5' maxlength='10' step='0.1' id='x"+i+"1' name='x"+i+"1' />x<sub>1</sub>";
 			for (var j = 2; j <= p_variables; j++) {
 				document.getElementById("aqui").innerHTML+=" + <input type='number' class='input' required autocomplete='off' size='5' maxlength='10' step='0.1' id='x"+i+j+"' name='x"+i+j+"' />x<sub>"+j+"</sub>";
 			}
 			document.getElementById("aqui").innerHTML+="<span> <= </span>"
-			+"<input type='number' class='input' required size='5' maxlength='10' id='b"+i+"' name='b"+i+"' style='text-align:left' />";
+			+"<input type='number' class='input' required size='5' maxlength='10' id='Const"+i+"' name='Const"+i+"' style='text-align:left' />";
 		}
-		document.getElementById("aqui").innerHTML+="<p><b>Restrição "+(++p_restricciones)+"</b></p>"
+		document.getElementById("aqui").innerHTML+="<p><Const>Restricción "+(++p_restricciones)+"</Const></p>"
 		+"<p>x<sub>i</sub> >= 0</p>";
 		document.getElementById("btn1").style.display = 'none';
 		document.getElementById("in1").disabled = true;
@@ -215,13 +198,13 @@ function printtabla(p_matriz) {
 			var td = document.createElement("td");
 			if (o == 0 && n < renglones) {
 				var sub = document.createElement("sub");
-				var b = document.createElement("b");
+				var Const = document.createElement("Const");
 				var textoSub = document.createTextNode(variable.substr(1,1));
 				var texto = document.createTextNode(variable.substr(0,1));
 				sub.appendChild(textoSub)
-				b.appendChild(sub);
-				b.insertBefore(texto, b.firstChild);
-				td.appendChild(b);
+				Const.appendChild(sub);
+				Const.insertBefore(texto, Const.firstChild);
+				td.appendChild(Const);
 			} else {
 				if (variable != '-Z') {
 					var fraccion = new Fraction(variable);
@@ -229,10 +212,10 @@ function printtabla(p_matriz) {
 					var texto = document.createTextNode(variable);
 					td.appendChild(texto);
 				} else {
-					var b = document.createElement("b");
+					var Const = document.createElement("Const");
 					var texto = document.createTextNode(variable);
-					b.appendChild(texto);
-					td.appendChild(b);
+					Const.appendChild(texto);
+					td.appendChild(Const);
 				}
 			}
 			tr.appendChild(td);
@@ -270,18 +253,18 @@ function resolver() {
 		indice++;
 	}
 	for (var m = 1; m <= restricciones; m++) {
-		matriz[0][indice] = "f"+m;
+		matriz[0][indice] = "h"+m;
 		indice++;
 	}
 	
-	matriz[0][matriz[0].length] = 'b';
+	matriz[0][matriz[0].length] = 'Const';
 
 	// Adicionando renglones com as variavéis básicas. Ex: 'f1', 'f2'
 	var x = document.querySelectorAll(".input");
 	indice = 0;
 	var columna = 0;
 	for (var i = 1; i < renglones; i++) {
-		matriz.push(['f'+i]);
+		matriz.push(['h'+i]);
 		for (var j = 1; j <= variables; j++) {
 			matriz[i][j] = parseFloat(x[indice].value.replace(",","."));
 			indice++;
@@ -300,7 +283,7 @@ function resolver() {
 	}
 	
 
-	// Adicionando a última linha '-Z'
+	// Adicionando a última Renglon '-Z'
 	var z = document.querySelectorAll(".inputZ");
 	columna = 0;
 	matriz.push(['-Z']);
@@ -318,7 +301,7 @@ function resolver() {
 	
 	var ite = 1;
 	while (condicaoParada(matriz)) {
-		document.getElementById("tab").innerHTML+="<p><b>Iteración "+ite+"</b></p>";
+		document.getElementById("tab").innerHTML+="<p><Const>Iteración "+ite+"</Const></p>";
 		calcMatriz(matriz);
 		ite++;
 	}
@@ -343,7 +326,7 @@ function resolver() {
 	}
 	var fraccion = new Fraction((matriz[renglones][columnas])*-1);
 	var z = fraccion.toFraction();
-	solucion += " e Z = "+z;
-	document.getElementById("tab").innerHTML+="<p><b>"+solucion+"</b></p>";
+	solucion += " y Z = "+z;
+	document.getElementById("tab").innerHTML+="<p><Const>"+solucion+"</Const></p>";
 	document.getElementById("btn4").type = 'button';
 }
